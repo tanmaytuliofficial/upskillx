@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UpSkillX — Learn. Grow. Excel.</title>
+  <meta name="description" content="UpSkillX is a premium edtech platform by Tanmay Tuli. Learn programming, DSA, and more with structured courses and expert guidance." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <style>
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      padding: 60px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: blur(20px);
+      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--brand);
+      box-shadow: var(--shadow-lg);
+    }
+    .feature-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+    }
+    .feature-title {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    .feature-desc { color: var(--text-2); font-size: 0.9rem; line-height: 1.6; }
+    .section-label {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--brand);
+      margin-bottom: 12px;
+    }
+    .section-heading {
+      text-align: center;
+      font-family: 'Clash Display', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin-bottom: 8px;
+    }
+    .courses-preview {
+      padding: 60px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      text-align: center;
+      color: var(--text-3);
+      font-size: 0.85rem;
+      position: relative;
+      z-index: 1;
+    }
+    .footer a { color: var(--brand); }
+    .trusted-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 30px 40px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      opacity: 0.5;
+    }
+    .trusted-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .mobile-menu-btn {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .features-grid, .courses-preview { padding: 40px 16px; }
+      .footer { padding: 24px 16px; }
+      .trusted-bar { gap: 20px; padding: 20px 16px; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">⚡UpSkillX</div>
+    <div class="navbar-spacer"></div>
+    <div class="navbar-actions">
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme"></button>
+      <a href="/pages/login.html" class="btn btn-secondary btn-sm">Log In</a>
+      <a href="/pages/login.html?mode=signup" class="btn btn-primary btn-sm">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" style="padding-top: 68px;">
+    <div>
+      <div class="hero-badge">🎓 Premium EdTech Platform · Free to Join</div>
+      <h1>
+        Learn Skills That<br>
+        <span class="gradient-text">Actually Matter</span>
+      </h1>
+      <p>Master DSA, Programming & System Design with structured courses, live doubt sessions, and expert mentorship by <strong>Tanmay Tuli</strong>.</p>
+      <div class="hero-actions">
+        <a href="/pages/login.html?mode=signup" class="btn btn-primary btn-lg">🚀 Start Learning Free</a>
+        <a href="#courses" class="btn btn-secondary btn-lg">Browse Courses</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value" id="statUsers">12K+</div>
+          <div class="hero-stat-label">Students</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">50+</div>
+          <div class="hero-stat-label">Courses</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">98%</div>
+          <div class="hero-stat-label">Satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section>
+    <div class="section-label animate-up">Why UpSkillX?</div>
+    <h2 class="section-heading animate-up-delay-1">Everything You Need to<br>Succeed</h2>
+    <div class="features-grid">
+      <div class="feature-card animate-up-delay-1">
+        <div class="feature-icon">🎬</div>
+        <div class="feature-title">Video Lectures</div>
+        <div class="feature-desc">High-quality YouTube-embedded lectures with chapter-wise organization and progress tracking.</div>
+      </div>
+      <div class="feature-card animate-up-delay-2">
+        <div class="feature-icon">📄</div>
+        <div class="feature-title">Downloadable Notes</div>
+        <div class="feature-desc">PDF notes for every lecture, automatically emailed when new content drops in your enrolled course.</div>
+      </div>
+      <div class="feature-card animate-up-delay-3">
+        <div class="feature-icon">🙋</div>
+        <div class="feature-title">Doubt Resolution</div>
+        <div class="feature-desc">Submit your doubts directly to the instructor. Get personalized responses from the admin dashboard.</div>
+      </div>
+      <div class="feature-card animate-up-delay-1">
+        <div class="feature-icon">🔥</div>
+        <div class="feature-title">Streaks & Leaderboard</div>
+        <div class="feature-desc">Stay motivated with daily streaks, XP points, and compete on the global leaderboard.</div>
+      </div>
+      <div class="feature-card animate-up-delay-2">
+        <div class="feature-icon">🏆</div>
+        <div class="feature-title">Certificates</div>
+        <div class="feature-desc">Earn verified certificates on course completion to showcase your skills to employers.</div>
+      </div>
+      <div class="feature-card animate-up-delay-3">
+        <div class="feature-icon">💬</div>
+        <div class="feature-title">Community Chat</div>
+        <div class="feature-desc">Connect with fellow learners, share resources, and collaborate in real-time chat rooms.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Courses Preview -->
+  <section id="courses" class="courses-preview">
+    <div class="section-label">Courses</div>
+    <h2 class="section-heading" style="margin-bottom: 32px;">Start Learning Today</h2>
+    <div class="courses-grid" id="landingCourses">
+      <!-- Populated by JS -->
+      <div class="course-card">
+        <div class="course-thumbnail">☕</div>
+        <div class="course-body">
+          <div class="course-title">Java for DSA — Complete Course</div>
+          <div class="course-instructor">Tanmay Tuli · 39 Lectures</div>
+          <div class="course-meta"><span class="course-tag">DSA</span><span class="course-tag">Java</span></div>
+          <a href="/pages/login.html?mode=signup" class="btn btn-primary w-full">Enroll Free</a>
+        </div>
+      </div>
+      <div class="course-card">
+        <div class="course-thumbnail">⚡</div>
+        <div class="course-body">
+          <div class="course-title">System Design Fundamentals</div>
+          <div class="course-instructor">Tanmay Tuli · Coming Soon</div>
+          <div class="course-meta"><span class="course-tag">System Design</span></div>
+          <button class="btn btn-secondary w-full" disabled>Coming Soon</button>
+        </div>
+      </div>
+      <div class="course-card">
+        <div class="course-thumbnail">🐍</div>
+        <div class="course-body">
+          <div class="course-title">Python Mastery Bootcamp</div>
+          <div class="course-instructor">Tanmay Tuli · Coming Soon</div>
+          <div class="course-meta"><span class="course-tag">Python</span></div>
+          <button class="btn btn-secondary w-full" disabled>Coming Soon</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2024 <strong>UpSkillX</strong> by <a href="mailto:official.tanmaytuli@gmail.com">Tanmay Tuli</a> · Built with ❤️ for learners</p>
+    <p style="margin-top: 8px;">
+      <a href="/pages/login.html">Login</a> ·
+      <a href="/pages/login.html?mode=signup">Sign Up</a> ·
+      <a href="mailto:official.tanmaytuli@gmail.com">Contact</a>
+    </p>
+  </footer>
+
+  <!-- Hidden Admin Star -->
+  <div class="admin-star" id="adminStar" title="">★</div>
+
+  <!-- Admin Login Modal -->
+  <div class="modal-overlay" id="adminModal">
+    <div class="modal" style="max-width: 380px;">
+      <button class="modal-close" id="adminModalClose">✕</button>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 2.5rem; margin-bottom: 10px;">🔐</div>
+        <div class="modal-title">Admin Access</div>
+        <p class="text-muted text-sm">Restricted area. Authorized personnel only.</p>
+      </div>
+      <div class="input-group">
+        <label>Admin ID</label>
+        <input type="text" id="adminId" placeholder="Enter admin ID" autocomplete="off" />
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="adminPass" placeholder="Enter password" />
+      </div>
+      <button class="btn btn-primary w-full" id="adminLoginBtn" style="margin-top: 8px;">Access Dashboard →</button>
+      <p class="text-sm text-muted text-center" style="margin-top: 12px;" id="adminError"></p>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script type="module">
+    // Theme
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('upskillx-theme') || 'dark';
+    html.setAttribute('data-theme', savedTheme);
+    themeToggle.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('upskillx-theme', next);
+    });
+
+    // Admin star
+    const adminStar = document.getElementById('adminStar');
+    const adminModal = document.getElementById('adminModal');
+    const adminModalClose = document.getElementById('adminModalClose');
+    adminStar.addEventListener('click', () => adminModal.classList.add('show'));
+    adminModalClose.addEventListener('click', () => adminModal.classList.remove('show'));
+    adminModal.addEventListener('click', e => { if(e.target === adminModal) adminModal.classList.remove('show'); });
+
+    // Admin login — validated server-side via Cloudflare Worker
+    document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+      const id = document.getElementById('adminId').value.trim();
+      const pass = document.getElementById('adminPass').value;
+      const errEl = document.getElementById('adminError');
+      errEl.textContent = '';
+      if (!id || !pass) { errEl.textContent = 'Please fill all fields.'; return; }
+
+      try {
+        const res = await fetch('/api/admin-auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, pass })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          sessionStorage.setItem('adminToken', data.token);
+          window.location.href = '/pages/admin.html';
+        } else {
+          errEl.textContent = '❌ Invalid credentials.';
+        }
+      } catch {
+        // Dev fallback for local testing without Worker
+        if (id === 'admin') {
+          errEl.textContent = '⚠️ Deploy to Cloudflare to enable secure admin auth.';
+        } else {
+          errEl.textContent = '❌ Invalid credentials.';
+        }
+      }
+    });
+
+    // Toast helper
+    window.showToast = (msg, type='info') => {
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      t.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span> ${msg}`;
+      document.getElementById('toastContainer').appendChild(t);
+      setTimeout(() => t.remove(), 4000);
+    };
+  </script>
+</body>
+</html>

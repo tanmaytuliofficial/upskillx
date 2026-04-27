@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UpSkillX — Course</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <style>
+    .course-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+      padding: 32px;
+      padding-top: calc(68px + 24px);
+      max-width: 1300px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .course-sidebar {
+      position: sticky;
+      top: 80px;
+      height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+    .course-sidebar::-webkit-scrollbar { width: 4px; }
+    .lecture-list-header {
+      font-family: 'Clash Display', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .course-header-card {
+      background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(255,107,107,0.06));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .reward-ad {
+      background: linear-gradient(135deg, rgba(255,209,102,0.12), rgba(255,166,0,0.06));
+      border: 1px solid rgba(255,209,102,0.2);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .reward-ad:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .reward-ad-icon { font-size: 2rem; }
+    .reward-ad-text strong { display: block; margin-bottom: 2px; }
+    .reward-ad-text span { font-size: 0.82rem; color: var(--text-2); }
+    @media (max-width: 960px) {
+      .course-layout { grid-template-columns: 1fr; padding: 16px; padding-top: calc(68px + 16px); }
+      .course-sidebar { position: static; height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orb bg-orb-1"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="/pages/dashboard.html" style="color:var(--text-2); font-size:0.9rem; display:flex; align-items:center; gap:6px;">← Back</a>
+    <div class="navbar-brand" style="margin-left:12px;">⚡UpSkillX</div>
+    <div class="navbar-spacer"></div>
+    <button class="theme-toggle" id="themeToggle"></button>
+    <div class="avatar" id="userAvatar">T</div>
+  </nav>
+
+  <div class="course-layout">
+    <!-- Main Content -->
+    <div>
+      <div class="course-header-card animate-up" id="courseHeader">
+        <div class="loader"><div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div></div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" id="courseTabs">
+        <div class="tab active" onclick="switchTab('lectures', this)">🎬 Lectures</div>
+        <div class="tab" onclick="switchTab('notes', this)">📄 Notes</div>
+        <div class="tab" onclick="switchTab('assignments', this)">📝 Assignments</div>
+        <div class="tab" onclick="switchTab('updates', this)">🔔 Updates</div>
+        <div class="tab" onclick="switchTab('certificate', this)">🏆 Certificate</div>
+      </div>
+
+      <!-- Tab Panels -->
+      <div id="tab-lectures">
+        <!-- Active lecture video -->
+        <div id="videoSection" style="display:none; margin-bottom:24px;">
+          <div class="video-container">
+            <iframe id="lectureFrame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div style="margin-top:16px;">
+            <h3 id="currentLectureTitle" style="font-family:'Clash Display',sans-serif; font-size:1.2rem;"></h3>
+            <p id="currentLectureDesc" style="color:var(--text-2); margin-top:6px; font-size:0.9rem;"></p>
+          </div>
+        </div>
+        <div id="lectureListMain">
+          <div class="loader"><div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div></div>
+        </div>
+      </div>
+
+      <div id="tab-notes" style="display:none;">
+        <!-- Reward ad for bonus notes -->
+        <div class="reward-ad" id="rewardAdBtn">
+          <div class="reward-ad-icon">🎁</div>
+          <div class="reward-ad-text">
+            <strong>Unlock Bonus Notes</strong>
+            <span>Watch a short ad to unlock extra resources for this course</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" style="margin-left:auto;">Watch Ad</button>
+        </div>
+        <div id="notesList">
+          <div class="loader"><div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div></div>
+        </div>
+      </div>
+
+      <div id="tab-assignments" style="display:none;">
+        <div id="assignmentsList">
+          <div style="text-align:center; padding:60px 20px; color:var(--text-3);">
+            <div style="font-size:3.5rem; margin-bottom:12px;">📝</div>
+            <h3>No Assignments Yet</h3>
+            <p style="margin-top:8px;">Assignments will appear here once uploaded by the instructor.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-updates" style="display:none;">
+        <div id="updatesList">
+          <div style="text-align:center; padding:60px 20px; color:var(--text-3);">
+            <div style="font-size:3.5rem; margin-bottom:12px;">🔔</div>
+            <h3>Course Updates</h3>
+            <p style="margin-top:8px;">Check here for instructor announcements and new content notifications.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-certificate" style="display:none;">
+        <div class="certificate" id="certSection" style="max-width:600px; margin:0 auto;">
+          <div style="font-size:4rem; margin-bottom:16px;">🏅</div>
+          <h2 style="font-family:'Clash Display',sans-serif; font-size:1.8rem; margin-bottom:12px;">Certificate of Completion</h2>
+          <p style="color:var(--text-2); margin-bottom:20px;">This certifies that</p>
+          <h3 style="font-size:1.4rem; color:var(--accent);" id="certName">Your Name</h3>
+          <p style="color:var(--text-2); margin:12px 0;">has successfully completed</p>
+          <h3 style="font-size:1.2rem;" id="certCourse">Course Name</h3>
+          <div style="margin-top:24px; padding-top:20px; border-top:1px solid rgba(255,209,102,0.2);">
+            <p style="font-size:0.85rem; color:var(--text-3);">Issued by <strong>UpSkillX</strong> · Tanmay Tuli</p>
+            <p style="font-size:0.75rem; color:var(--text-3); margin-top:4px;" id="certDate"></p>
+          </div>
+          <div id="certProgress" style="margin-top:20px;">
+            <p style="font-size:0.9rem; color:var(--text-2);">Complete all lectures to unlock your certificate.</p>
+            <div class="progress-bar" style="margin-top:12px; height:12px;"><div class="progress-fill" id="certProgressFill" style="width:0%;"></div></div>
+            <p style="font-size:0.8rem; color:var(--text-3); margin-top:8px;" id="certProgressText">0% complete</p>
+          </div>
+          <button class="btn btn-primary" id="downloadCert" style="margin-top:24px; display:none;">Download Certificate 📄</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course Sidebar -->
+    <div class="course-sidebar">
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div class="lecture-list-header">
+          <span>Course Content</span>
+          <span id="lectureProgress" style="font-size:0.78rem; color:var(--text-3); font-weight:500;">0/0 done</span>
+        </div>
+        <div id="lectureSidebarList" style="padding:12px;">
+          <div class="loader"><div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reward Ad Modal -->
+  <div class="modal-overlay" id="rewardModal">
+    <div class="modal" style="max-width:400px; text-align:center;">
+      <div style="font-size:3rem; margin-bottom:16px;">📺</div>
+      <div class="modal-title">Watch Ad to Unlock Bonus Notes</div>
+      <p class="text-muted text-sm" style="margin-bottom:24px;">Your support keeps UpSkillX free for everyone. A short 15-second ad unlocks this resource.</p>
+      <div id="adTimer" style="font-size:2.5rem; font-family:'Clash Display',sans-serif; color:var(--brand); margin-bottom:20px;">15</div>
+      <p class="text-sm text-muted">Ad playing... (simulated)</p>
+      <button class="btn btn-success w-full" id="claimBonus" style="display:none; margin-top:16px;">🎁 Claim Bonus Notes!</button>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script type="module">
+    import { auth, db, onAuthStateChanged, doc, getDoc, updateDoc, collection, getDocs, query, orderBy } from '/js/firebase-config.js';
+
+    const html = document.documentElement;
+    const saved = localStorage.getItem('upskillx-theme') || 'dark';
+    html.setAttribute('data-theme', saved);
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const t = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', t);
+      localStorage.setItem('upskillx-theme', t);
+    });
+
+    function toast(msg, type='info') {
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      t.innerHTML = `<span>${type==='success'?'✅':type==='error'?'❌':'ℹ️'}</span> ${msg}`;
+      document.getElementById('toastContainer').appendChild(t);
+      setTimeout(() => t.remove(), 4000);
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const courseId = params.get('id');
+    if (!courseId) window.location.href = '/pages/dashboard.html';
+
+    let courseData = null;
+    let lectures = [];
+    let completedLectures = [];
+    let userData = null;
+    let currentUser = null;
+
+    // Tab switching
+    window.switchTab = function(tab, el) {
+      document.querySelectorAll('[id^="tab-"]').forEach(t => t.style.display = 'none');
+      document.getElementById(`tab-${tab}`).style.display = '';
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = '/pages/login.html'; return; }
+      currentUser = user;
+      document.getElementById('userAvatar').textContent = (user.displayName||user.email||'U')[0].toUpperCase();
+
+      // Load user data
+      const uSnap = await getDoc(doc(db, 'users', user.uid));
+      if (uSnap.exists()) {
+        userData = uSnap.data();
+        completedLectures = userData.completedLectures?.[courseId] || [];
+      }
+
+      // Load course
+      const cSnap = await getDoc(doc(db, 'courses', courseId));
+      if (!cSnap.exists()) { toast('Course not found.', 'error'); return; }
+      courseData = cSnap.data();
+      document.title = `UpSkillX — ${courseData.title}`;
+      document.getElementById('certName').textContent = userData?.name || user.displayName || 'Learner';
+      document.getElementById('certCourse').textContent = courseData.title;
+      document.getElementById('certDate').textContent = 'Issued: ' + new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+
+      // Render course header
+      document.getElementById('courseHeader').innerHTML = `
+        <div style="display:flex; align-items:flex-start; gap:20px; flex-wrap:wrap;">
+          <div style="font-size:3rem;">${courseData.emoji || '📚'}</div>
+          <div style="flex:1;">
+            <h1 style="font-family:'Clash Display',sans-serif; font-size:1.5rem; margin-bottom:6px;">${courseData.title}</h1>
+            <p style="color:var(--text-2); font-size:0.95rem; margin-bottom:12px;">${courseData.description || ''}</p>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+              <span style="font-size:0.85rem; color:var(--text-3);">👨‍🏫 ${courseData.instructor || 'Tanmay Tuli'}</span>
+              ${(courseData.tags||[]).map(t => `<span class="course-tag">${t}</span>`).join('')}
+            </div>
+          </div>
+        </div>`;
+
+      // Load lectures
+      await loadLectures();
+      // Load notes
+      await loadNotes();
+    });
+
+    async function loadLectures() {
+      try {
+        const snap = await getDocs(query(collection(db, `courses/${courseId}/lectures`), orderBy('order', 'asc')));
+        lectures = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderLectures();
+      } catch(e) {
+        document.getElementById('lectureListMain').innerHTML = '<p class="text-muted">Failed to load lectures.</p>';
+        document.getElementById('lectureSidebarList').innerHTML = '<p class="text-muted text-sm">No lectures.</p>';
+      }
+    }
+
+    function renderLectures() {
+      const total = lectures.length;
+      const done = completedLectures.length;
+      document.getElementById('lectureProgress').textContent = `${done}/${total} done`;
+      const pct = total ? Math.round((done/total)*100) : 0;
+      document.getElementById('certProgressFill').style.width = pct + '%';
+      document.getElementById('certProgressText').textContent = `${pct}% complete`;
+      if (pct === 100) document.getElementById('downloadCert').style.display = '';
+
+      // Main list
+      const main = document.getElementById('lectureListMain');
+      if (!lectures.length) {
+        main.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-3);"><div style="font-size:3rem;margin-bottom:12px;">🎬</div><p>No lectures uploaded yet. Check back soon!</p></div>';
+        document.getElementById('lectureSidebarList').innerHTML = '';
+        return;
+      }
+      main.innerHTML = lectures.map((l, i) => {
+        const isDone = completedLectures.includes(l.id);
+        return `<div class="lecture-item ${isDone ? 'active' : ''}" onclick="playLecture(${i})">
+          <div class="lecture-num">${i+1}</div>
+          <div class="lecture-info">
+            <div class="lecture-title">${l.title}</div>
+            <div class="lecture-duration">${l.duration || ''}</div>
+          </div>
+          ${isDone ? '<span class="lecture-done">✓</span>' : ''}
+        </div>`;
+      }).join('');
+
+      // Sidebar list (same)
+      document.getElementById('lectureSidebarList').innerHTML = main.innerHTML;
+    }
+
+    window.playLecture = async function(index) {
+      const lec = lectures[index];
+      if (!lec?.youtubeId && !lec?.youtubeUrl) {
+        toast('Video not available yet.', 'info');
+        return;
+      }
+      const vid = document.getElementById('videoSection');
+      vid.style.display = '';
+      const ytId = lec.youtubeId || extractYTId(lec.youtubeUrl);
+      document.getElementById('lectureFrame').src = `https://www.youtube.com/embed/${ytId}?autoplay=1`;
+      document.getElementById('currentLectureTitle').textContent = lec.title;
+      document.getElementById('currentLectureDesc').textContent = lec.description || '';
+      vid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Mark as completed
+      if (!completedLectures.includes(lec.id)) {
+        completedLectures.push(lec.id);
+        try {
+          const uRef = doc(db, 'users', currentUser.uid);
+          const uSnap = await getDoc(uRef);
+          const cls = uSnap.data().completedLectures || {};
+          cls[courseId] = completedLectures;
+          await updateDoc(uRef, { completedLectures: cls, xp: (userData?.xp || 0) + 10 });
+          toast('+10 XP earned! 🎉', 'success');
+          renderLectures();
+        } catch(e) {}
+      }
+    };
+
+    function extractYTId(url) {
+      if (!url) return '';
+      const match = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})/);
+      return match ? match[1] : url;
+    }
+
+    async function loadNotes() {
+      try {
+        const snap = await getDocs(collection(db, `courses/${courseId}/notes`));
+        const container = document.getElementById('notesList');
+        if (snap.empty) {
+          container.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-3);"><div style="font-size:3rem;margin-bottom:12px;">📄</div><p>No notes uploaded yet.</p></div>';
+          return;
+        }
+        container.innerHTML = snap.docs.map(d => {
+          const n = d.data();
+          return `<div class="pdf-item">
+            <span style="font-size:1.8rem;">📕</span>
+            <div style="flex:1;">
+              <div style="font-weight:600;">${n.title}</div>
+              <div style="font-size:0.82rem; color:var(--text-3);">${n.size || 'PDF'}</div>
+            </div>
+            <a href="${n.url}" target="_blank" class="btn btn-secondary btn-sm">Download ↓</a>
+          </div>`;
+        }).join('');
+      } catch(e) {}
+    }
+
+    // Reward ad
+    document.getElementById('rewardAdBtn').addEventListener('click', () => {
+      document.getElementById('rewardModal').classList.add('show');
+      let secs = 15;
+      const timer = document.getElementById('adTimer');
+      const interval = setInterval(() => {
+        secs--;
+        timer.textContent = secs;
+        if (secs <= 0) {
+          clearInterval(interval);
+          timer.textContent = '🎉';
+          document.getElementById('claimBonus').style.display = '';
+        }
+      }, 1000);
+    });
+
+    document.getElementById('claimBonus').addEventListener('click', () => {
+      document.getElementById('rewardModal').classList.remove('show');
+      toast('Bonus notes unlocked! 🎁', 'success');
+      // Add a bonus notes item
+      const bonus = document.createElement('div');
+      bonus.className = 'pdf-item animate-up';
+      bonus.innerHTML = `<span style="font-size:1.8rem;">🎁</span><div style="flex:1;"><div style="font-weight:600;">Bonus Notes — Advanced Concepts</div><div style="font-size:0.82rem;color:var(--text-3);">Unlocked via Reward</div></div><span class="btn btn-success btn-sm">Unlocked ✓</span>`;
+      document.getElementById('notesList').prepend(bonus);
+    });
+
+    document.getElementById('rewardModal').addEventListener('click', e => {
+      if (e.target === document.getElementById('rewardModal')) document.getElementById('rewardModal').classList.remove('show');
+    });
+
+    document.getElementById('downloadCert').addEventListener('click', () => {
+      toast('Certificate downloaded! (PDF generation requires backend)', 'success');
+    });
+  </script>
+</body>
+</html>

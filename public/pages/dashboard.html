@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UpSkillX — Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <style>
+    .welcome-hero {
+      background: linear-gradient(135deg, rgba(108,99,255,0.15) 0%, rgba(255,107,107,0.08) 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px 32px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      animation: fade-up 0.5s ease;
+    }
+    .welcome-text h2 {
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+    .welcome-text p { color: var(--text-2); font-size: 0.95rem; }
+    .announcement-list { margin-bottom: 28px; }
+    .continue-section { margin-bottom: 28px; }
+  </style>
+</head>
+<body>
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="/" class="navbar-brand">⚡UpSkillX</a>
+    <div class="navbar-spacer"></div>
+    <div class="navbar-actions">
+      <button class="theme-toggle" id="themeToggle"></button>
+      <div class="streak-badge" id="streakBadge">
+        <span class="streak-flame">🔥</span>
+        <span id="streakCount">0</span> day streak
+      </div>
+      <div class="avatar" id="userAvatar" title="Profile">T</div>
+    </div>
+  </nav>
+
+  <!-- Mobile Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div style="padding: 0 8px; margin-bottom: 20px;">
+        <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-3); padding-left: 8px; margin-bottom: 8px;">Navigation</div>
+      </div>
+      <div class="nav-item active" onclick="navigate('dashboard')">
+        <span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span>
+      </div>
+      <div class="nav-item" onclick="navigate('courses')">
+        <span class="nav-icon">📚</span><span class="nav-label">Courses</span>
+      </div>
+      <div class="nav-item" onclick="navigate('study')">
+        <span class="nav-icon">📖</span><span class="nav-label">Study</span>
+      </div>
+      <div class="nav-item" onclick="navigate('chat')">
+        <span class="nav-icon">💬</span><span class="nav-label">Chat</span>
+        <span class="nav-badge" id="chatBadge" style="display:none;">3</span>
+      </div>
+      <div class="nav-item" onclick="navigate('doubt')">
+        <span class="nav-icon">🙋</span><span class="nav-label">Doubt</span>
+      </div>
+      <div class="nav-item" onclick="navigate('leaderboard')">
+        <span class="nav-icon">🏆</span><span class="nav-label">Leaderboard</span>
+      </div>
+      <div class="nav-item" onclick="navigate('profile')">
+        <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
+      </div>
+
+      <div style="flex:1;"></div>
+      <div class="divider"></div>
+      <div class="nav-item" id="logoutBtn" style="color: var(--brand-2);">
+        <span class="nav-icon">🚪</span><span class="nav-label">Log Out</span>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard Section -->
+      <section id="sec-dashboard">
+        <div class="welcome-hero" id="welcomeHero">
+          <div class="welcome-text">
+            <h2>Hi, <span id="userName">Learner</span> 👋</h2>
+            <p>You're on a <strong id="welcomeStreak">0</strong>-day streak. Keep going!</p>
+          </div>
+          <div class="flex gap-12" style="flex-wrap:wrap;">
+            <div style="text-align:center;">
+              <div style="font-family:'Clash Display',sans-serif; font-size:1.6rem; font-weight:700; color:var(--brand);" id="userXP">0</div>
+              <div style="font-size:0.78rem; color:var(--text-2);">XP Points</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-family:'Clash Display',sans-serif; font-size:1.6rem; font-weight:700; color:var(--brand-2);" id="enrollCount">0</div>
+              <div style="font-size:0.78rem; color:var(--text-2);">Enrolled</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Announcements -->
+        <div class="announcement-list" id="announcements"></div>
+
+        <!-- Stats -->
+        <div class="stats-grid animate-up-delay-1">
+          <div class="stat-card" style="--stat-color: var(--brand);">
+            <div class="stat-icon">📚</div>
+            <div class="stat-value" id="statEnrolled">0</div>
+            <div class="stat-label">Enrolled Courses</div>
+          </div>
+          <div class="stat-card" style="--stat-color: #FFD166;">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value" id="statCompleted">0</div>
+            <div class="stat-label">Completed</div>
+          </div>
+          <div class="stat-card" style="--stat-color: var(--brand-3);">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-value" id="statXP">0</div>
+            <div class="stat-label">XP Earned</div>
+          </div>
+          <div class="stat-card" style="--stat-color: var(--brand-2);">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-value" id="statStreak">0</div>
+            <div class="stat-label">Day Streak</div>
+          </div>
+        </div>
+
+        <!-- Continue Learning -->
+        <div class="continue-section animate-up-delay-2">
+          <div class="section-header">
+            <div class="section-title">Continue Learning</div>
+            <div class="section-subtitle">Pick up where you left off</div>
+          </div>
+          <div id="continueCards">
+            <div style="text-align:center; padding:40px; color:var(--text-3);">
+              <div style="font-size:3rem; margin-bottom:12px;">📚</div>
+              <p>No courses yet. <a href="#" onclick="navigate('courses')" style="color:var(--brand);">Browse courses →</a></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Courses Section -->
+      <section id="sec-courses" style="display:none;">
+        <div class="section-header">
+          <div class="section-title">All Courses</div>
+          <div class="section-subtitle">Expand your skills with our curated course library</div>
+        </div>
+        <div class="courses-grid" id="allCoursesGrid">
+          <div class="loader"><div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div></div>
+        </div>
+      </section>
+
+      <!-- Study Section -->
+      <section id="sec-study" style="display:none;">
+        <div class="section-header">
+          <div class="section-title">📖 Study Mode</div>
+          <div class="section-subtitle">Your enrolled courses in focus mode</div>
+        </div>
+        <div id="studyContent">
+          <div style="text-align:center; padding:60px 20px; color:var(--text-3);">
+            <div style="font-size:4rem; margin-bottom:16px;">📖</div>
+            <h3>Enroll in courses to start studying</h3>
+            <p style="margin-top:8px; margin-bottom:24px;">Your active course content appears here</p>
+            <button class="btn btn-primary" onclick="navigate('courses')">Browse Courses</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chat Section -->
+      <section id="sec-chat" style="display:none; padding:0;">
+        <div class="chat-container">
+          <div style="padding:20px 24px; border-bottom: 1px solid var(--border);">
+            <div class="section-title">💬 Community Chat</div>
+            <div class="section-subtitle">Connect with fellow learners</div>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <div class="chat-bubble received">
+              <strong>UpSkillX Bot</strong><br>Welcome to UpSkillX community chat! 🎉 Ask questions, share resources, and help each other grow.
+            </div>
+          </div>
+          <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type a message..." />
+            <button class="btn btn-primary" id="sendChat">Send ↗</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Doubt Section -->
+      <section id="sec-doubt" style="display:none;">
+        <div class="section-header">
+          <div class="section-title">🙋 Submit a Doubt</div>
+          <div class="section-subtitle">Ask your question — we'll get back to you soon</div>
+        </div>
+        <div class="card" style="padding:28px; max-width: 640px;">
+          <div class="input-group">
+            <label>Subject / Course</label>
+            <select id="doubtCourse">
+              <option value="">Select a course...</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Your Doubt</label>
+            <textarea id="doubtText" rows="5" placeholder="Describe your doubt clearly. Include any code, error messages, or context..."></textarea>
+          </div>
+          <button class="btn btn-primary" id="submitDoubt">Submit Doubt →</button>
+        </div>
+        <div style="margin-top:32px;">
+          <div class="section-title" style="font-size:1.2rem; margin-bottom:16px;">Your Previous Doubts</div>
+          <div id="myDoubts">
+            <p class="text-muted text-sm">No doubts submitted yet.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Leaderboard Section -->
+      <section id="sec-leaderboard" style="display:none;">
+        <div class="section-header">
+          <div class="section-title">🏆 Leaderboard</div>
+          <div class="section-subtitle">Top learners this week</div>
+        </div>
+        <div id="leaderboardList" style="max-width: 640px;">
+          <div class="loader"><div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div></div>
+        </div>
+      </section>
+
+      <!-- Profile Section -->
+      <section id="sec-profile" style="display:none;">
+        <div class="profile-hero">
+          <div class="profile-avatar-lg" id="profileAvatarLg">T</div>
+          <h2 id="profileName">Learner</h2>
+          <p style="opacity:0.8; margin-top:4px;" id="profileEmail">user@example.com</p>
+          <p style="opacity:0.6; font-size:0.85rem; margin-top:4px;" id="profileJoined">Joined recently</p>
+        </div>
+        <div class="stats-grid" style="margin-bottom:24px;">
+          <div class="stat-card" style="--stat-color:var(--brand);"><div class="stat-icon">⭐</div><div class="stat-value" id="pXP">0</div><div class="stat-label">Total XP</div></div>
+          <div class="stat-card" style="--stat-color:var(--accent);"><div class="stat-icon">🔥</div><div class="stat-value" id="pStreak">0</div><div class="stat-label">Day Streak</div></div>
+          <div class="stat-card" style="--stat-color:var(--brand-3);"><div class="stat-icon">📚</div><div class="stat-value" id="pCourses">0</div><div class="stat-label">Courses</div></div>
+        </div>
+        <!-- Certificates -->
+        <div class="section-header"><div class="section-title">🎓 Certificates</div></div>
+        <div id="certList">
+          <div class="certificate" style="max-width:500px;">
+            <div style="font-size:3rem; margin-bottom:12px;">🏅</div>
+            <h3 style="font-family:'Clash Display',sans-serif; margin-bottom:8px;">Complete a course to earn your certificate</h3>
+            <p style="color:var(--text-2); font-size:0.9rem;">Certificates are awarded upon 100% course completion and are verifiable.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Bottom Nav (mobile) -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-item active" onclick="navigate('dashboard')"><span class="nav-icon">🏠</span>Home</div>
+    <div class="bottom-nav-item" onclick="navigate('courses')"><span class="nav-icon">📚</span>Courses</div>
+    <div class="bottom-nav-item" onclick="navigate('chat')"><span class="nav-icon">💬</span>Chat</div>
+    <div class="bottom-nav-item" onclick="navigate('doubt')"><span class="nav-icon">🙋</span>Doubt</div>
+    <div class="bottom-nav-item" onclick="navigate('profile')"><span class="nav-icon">👤</span>Profile</div>
+  </nav>
+
+  <!-- Admin Star -->
+  <div class="admin-star" id="adminStar">★</div>
+  <div class="modal-overlay" id="adminModal">
+    <div class="modal" style="max-width:360px;">
+      <button class="modal-close" id="adminModalClose">✕</button>
+      <div style="text-align:center; margin-bottom:20px;"><div style="font-size:2rem;">🔐</div><div class="modal-title">Admin Access</div></div>
+      <div class="input-group"><label>ID</label><input type="text" id="adminId" /></div>
+      <div class="input-group"><label>Password</label><input type="password" id="adminPass" /></div>
+      <button class="btn btn-primary w-full" id="adminLoginBtn">Enter →</button>
+      <p class="text-sm" style="color:#FF6B6B; text-align:center; margin-top:8px;" id="adminErr"></p>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script type="module">
+    import { auth, db, signOut, onAuthStateChanged, doc, getDoc, collection, getDocs, addDoc, updateDoc, query, where, orderBy, serverTimestamp } from '/js/firebase-config.js';
+
+    // Theme
+    const html = document.documentElement;
+    const saved = localStorage.getItem('upskillx-theme') || 'dark';
+    html.setAttribute('data-theme', saved);
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const t = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', t);
+      localStorage.setItem('upskillx-theme', t);
+    });
+
+    // Toast
+    function toast(msg, type='info') {
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      t.innerHTML = `<span>${type==='success'?'✅':type==='error'?'❌':'ℹ️'}</span> ${msg}`;
+      document.getElementById('toastContainer').appendChild(t);
+      setTimeout(() => t.remove(), 4000);
+    }
+
+    // Navigation
+    let currentSection = 'dashboard';
+    window.navigate = function(sec) {
+      document.querySelectorAll('[id^="sec-"]').forEach(el => el.style.display = 'none');
+      document.getElementById(`sec-${sec}`).style.display = '';
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.bottom-nav-item').forEach(el => el.classList.remove('active'));
+      currentSection = sec;
+      // Close sidebar on mobile
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('show');
+      if (sec === 'leaderboard') loadLeaderboard();
+      if (sec === 'courses') loadCourses();
+    };
+
+    // Hamburger
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebarOverlay').classList.toggle('show');
+    });
+    document.getElementById('sidebarOverlay').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('show');
+    });
+
+    // User avatar click → profile
+    document.getElementById('userAvatar').addEventListener('click', () => navigate('profile'));
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = '/pages/login.html';
+    });
+
+    // Admin star
+    document.getElementById('adminStar').addEventListener('click', () => document.getElementById('adminModal').classList.add('show'));
+    document.getElementById('adminModalClose').addEventListener('click', () => document.getElementById('adminModal').classList.remove('show'));
+    document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+      const id = document.getElementById('adminId').value;
+      const pass = document.getElementById('adminPass').value;
+      try {
+        const res = await fetch('/api/admin-auth', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id, pass}) });
+        const data = await res.json();
+        if (data.ok) { sessionStorage.setItem('adminToken', data.token); window.location.href = '/pages/admin.html'; }
+        else document.getElementById('adminErr').textContent = '❌ Invalid credentials.';
+      } catch {
+        document.getElementById('adminErr').textContent = '⚠️ Backend unavailable.';
+      }
+    });
+
+    let currentUser = null;
+    let userData = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = '/pages/login.html'; return; }
+      currentUser = user;
+      const initials = (user.displayName || user.email || 'U')[0].toUpperCase();
+      document.getElementById('userAvatar').textContent = initials;
+      document.getElementById('profileAvatarLg').textContent = initials;
+      document.getElementById('profileEmail').textContent = user.email;
+
+      // Load user data
+      const snap = await getDoc(doc(db, 'users', user.uid));
+      if (snap.exists()) {
+        userData = snap.data();
+        const name = userData.name || user.displayName || 'Learner';
+        document.getElementById('userName').textContent = name;
+        document.getElementById('profileName').textContent = name;
+        document.getElementById('userXP').textContent = userData.xp || 0;
+        document.getElementById('enrollCount').textContent = (userData.enrolledCourses || []).length;
+        document.getElementById('statEnrolled').textContent = (userData.enrolledCourses || []).length;
+        document.getElementById('statXP').textContent = userData.xp || 0;
+        document.getElementById('statStreak').textContent = userData.streak || 0;
+        document.getElementById('streakCount').textContent = userData.streak || 0;
+        document.getElementById('welcomeStreak').textContent = userData.streak || 0;
+        document.getElementById('pXP').textContent = userData.xp || 0;
+        document.getElementById('pStreak').textContent = userData.streak || 0;
+        document.getElementById('pCourses').textContent = (userData.enrolledCourses || []).length;
+        if (userData.joinDate?.toDate) {
+          document.getElementById('profileJoined').textContent = 'Joined ' + userData.joinDate.toDate().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+        }
+        // Update streak daily
+        await updateDoc(doc(db, 'users', user.uid), { lastActive: serverTimestamp() });
+      }
+
+      // Load announcements
+      loadAnnouncements();
+      // Load enrolled course continue cards
+      loadContinueCards();
+      // Load doubt courses
+      loadDoubtCourses();
+    });
+
+    async function loadAnnouncements() {
+      try {
+        const snap = await getDocs(query(collection(db, 'announcements'), orderBy('createdAt', 'desc')));
+        const container = document.getElementById('announcements');
+        if (snap.empty) return;
+        snap.docs.slice(0, 3).forEach(d => {
+          const a = d.data();
+          const el = document.createElement('div');
+          el.className = 'announcement';
+          el.innerHTML = `<span style="font-size:1.5rem;">📢</span><div><strong>${a.title || 'Announcement'}</strong><br><span style="color:var(--text-2); font-size:0.9rem;">${a.message || ''}</span></div>`;
+          container.appendChild(el);
+        });
+      } catch(e) {}
+    }
+
+    async function loadContinueCards() {
+      if (!userData?.enrolledCourses?.length) return;
+      const container = document.getElementById('continueCards');
+      container.innerHTML = '';
+      try {
+        for (const cid of userData.enrolledCourses.slice(0, 3)) {
+          const cSnap = await getDoc(doc(db, 'courses', cid));
+          if (!cSnap.exists()) continue;
+          const c = cSnap.data();
+          const card = document.createElement('div');
+          card.className = 'course-card';
+          card.style.marginBottom = '12px';
+          card.style.cursor = 'pointer';
+          card.innerHTML = `
+            <div style="display:flex; align-items:center; gap:16px; padding:16px 20px;">
+              <div style="width:56px; height:56px; border-radius:12px; background:linear-gradient(135deg, var(--brand), var(--brand-2)); display:flex; align-items:center; justify-content:center; font-size:1.8rem; flex-shrink:0;">${c.emoji || '📚'}</div>
+              <div style="flex:1;">
+                <div style="font-weight:600; margin-bottom:4px;">${c.title}</div>
+                <div style="font-size:0.82rem; color:var(--text-2);">${c.instructor || 'Tanmay Tuli'}</div>
+                <div class="progress-bar" style="margin-top:8px;"><div class="progress-fill" style="width:${c.progress || 0}%;"></div></div>
+              </div>
+              <span style="color:var(--brand); font-weight:600; font-size:0.9rem;">Continue →</span>
+            </div>`;
+          card.addEventListener('click', () => window.location.href = `/pages/course.html?id=${cid}`);
+          container.appendChild(card);
+        }
+      } catch(e) {}
+    }
+
+    async function loadCourses() {
+      const grid = document.getElementById('allCoursesGrid');
+      grid.innerHTML = '<div class="loader"><div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div></div>';
+      try {
+        const snap = await getDocs(collection(db, 'courses'));
+        grid.innerHTML = '';
+        if (snap.empty) {
+          grid.innerHTML = '<p class="text-muted">No courses available yet. Check back soon!</p>';
+          return;
+        }
+        snap.forEach(d => {
+          const c = d.data();
+          const enrolled = userData?.enrolledCourses?.includes(d.id);
+          const card = document.createElement('div');
+          card.className = 'course-card';
+          card.innerHTML = `
+            <div class="course-thumbnail">${c.thumbnailUrl ? `<img class="course-thumbnail-img" src="${c.thumbnailUrl}" />` : (c.emoji || '📚')}</div>
+            <div class="course-body">
+              <div class="course-title">${c.title}</div>
+              <div class="course-instructor">${c.instructor || 'Tanmay Tuli'}</div>
+              <div class="course-meta">
+                ${(c.tags || []).map(t => `<span class="course-tag">${t}</span>`).join('')}
+                ${enrolled ? '<span class="course-enrolled-badge">✓ Enrolled</span>' : ''}
+              </div>
+              ${enrolled
+                ? `<button class="btn btn-success w-full" onclick="window.location.href='/pages/course.html?id=${d.id}'">Open Course →</button>`
+                : `<button class="btn btn-primary w-full enroll-btn" data-id="${d.id}">Enroll Free</button>`}
+            </div>`;
+          grid.appendChild(card);
+        });
+        // Enroll buttons
+        grid.querySelectorAll('.enroll-btn').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const cid = btn.dataset.id;
+            if (!currentUser) return;
+            btn.disabled = true; btn.textContent = 'Enrolling...';
+            try {
+              const uRef = doc(db, 'users', currentUser.uid);
+              const uSnap = await getDoc(uRef);
+              const enrolled = uSnap.data().enrolledCourses || [];
+              if (!enrolled.includes(cid)) {
+                enrolled.push(cid);
+                await updateDoc(uRef, { enrolledCourses: enrolled });
+                // Update course enrollment count
+                await updateDoc(doc(db, 'courses', cid), { enrollmentCount: (0) });
+              }
+              toast('Enrolled successfully! 🎉', 'success');
+              btn.textContent = '✓ Enrolled';
+              btn.className = 'btn btn-success w-full';
+              btn.onclick = () => window.location.href = `/pages/course.html?id=${cid}`;
+            } catch(e) { toast(e.message, 'error'); btn.disabled = false; btn.textContent = 'Enroll Free'; }
+          });
+        });
+      } catch(e) { grid.innerHTML = '<p class="text-muted">Failed to load courses.</p>'; }
+    }
+
+    async function loadLeaderboard() {
+      const container = document.getElementById('leaderboardList');
+      container.innerHTML = '<div class="loader"><div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div></div>';
+      try {
+        const snap = await getDocs(query(collection(db, 'users'), orderBy('xp', 'desc')));
+        container.innerHTML = '';
+        let rank = 1;
+        snap.docs.slice(0, 20).forEach(d => {
+          const u = d.data();
+          const rankClass = rank <= 3 ? `rank-${rank}` : '';
+          const rankIcon = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+          const isMe = d.id === currentUser?.uid;
+          const item = document.createElement('div');
+          item.className = 'leaderboard-item';
+          if (isMe) item.style.borderColor = 'var(--brand)';
+          item.innerHTML = `
+            <div class="leaderboard-rank ${rankClass}">${rankIcon}</div>
+            <div class="avatar" style="width:36px; height:36px; font-size:0.85rem;">${(u.name||'U')[0]}</div>
+            <div style="flex:1;"><div style="font-weight:600;">${u.name || 'Learner'}${isMe?' (You)':''}</div><div style="font-size:0.8rem; color:var(--text-3);">🔥 ${u.streak||0} day streak</div></div>
+            <div style="font-family:'Clash Display',sans-serif; font-weight:700; color:var(--brand);">${u.xp||0} XP</div>`;
+          container.appendChild(item);
+          rank++;
+        });
+        if (!snap.docs.length) container.innerHTML = '<p class="text-muted">Leaderboard empty. Start learning to earn XP!</p>';
+      } catch(e) { container.innerHTML = '<p class="text-muted">Failed to load leaderboard.</p>'; }
+    }
+
+    async function loadDoubtCourses() {
+      try {
+        const snap = await getDocs(collection(db, 'courses'));
+        const sel = document.getElementById('doubtCourse');
+        snap.forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d.id;
+          opt.textContent = d.data().title;
+          sel.appendChild(opt);
+        });
+      } catch(e) {}
+    }
+
+    // Submit doubt
+    document.getElementById('submitDoubt').addEventListener('click', async () => {
+      const course = document.getElementById('doubtCourse').value;
+      const text = document.getElementById('doubtText').value.trim();
+      if (!text) { toast('Please describe your doubt.', 'error'); return; }
+      try {
+        await addDoc(collection(db, 'doubts'), {
+          uid: currentUser.uid,
+          name: userData?.name || currentUser.displayName || 'Learner',
+          email: currentUser.email,
+          course: course || 'General',
+          message: text,
+          createdAt: serverTimestamp(),
+          status: 'open'
+        });
+        toast('Doubt submitted! We\'ll respond soon. 📩', 'success');
+        document.getElementById('doubtText').value = '';
+      } catch(e) { toast(e.message, 'error'); }
+    });
+
+    // Chat
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    let chatHistory = [];
+
+    document.getElementById('sendChat').addEventListener('click', sendMessage);
+    chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+
+    function sendMessage() {
+      const msg = chatInput.value.trim();
+      if (!msg) return;
+      chatInput.value = '';
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-bubble sent';
+      bubble.textContent = msg;
+      chatMessages.appendChild(bubble);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      chatHistory.push({ role: 'user', content: msg });
+      // Store in Firestore
+      addDoc(collection(db, 'chats'), {
+        uid: currentUser?.uid,
+        name: userData?.name || 'Learner',
+        message: msg,
+        createdAt: serverTimestamp()
+      }).catch(() => {});
+    }
+  </script>
+</body>
+</html>

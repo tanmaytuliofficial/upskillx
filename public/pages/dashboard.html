@@ -417,33 +417,41 @@
     }
 
     async function loadContinueCards() {
-      if (!userData?.enrolledCourses?.length) return;
-      const container = document.getElementById('continueCards');
-      container.innerHTML = '';
-      try {
-        for (const cid of userData.enrolledCourses.slice(0, 3)) {
-          const cSnap = await getDoc(doc(db, 'courses', cid));
-          if (!cSnap.exists()) continue;
-          const c = cSnap.data();
-          const card = document.createElement('div');
-          card.className = 'course-card';
-          card.style.marginBottom = '12px';
-          card.style.cursor = 'pointer';
-          card.innerHTML = `
-            <div style="display:flex; align-items:center; gap:16px; padding:16px 20px;">
-              <div style="width:56px; height:56px; border-radius:12px; background:linear-gradient(135deg, var(--brand), var(--brand-2)); display:flex; align-items:center; justify-content:center; font-size:1.8rem; flex-shrink:0;">${c.emoji || '📚'}</div>
-              <div style="flex:1;">
-                <div style="font-weight:600; margin-bottom:4px;">${c.title}</div>
-                <div style="font-size:0.82rem; color:var(--text-2);">${c.instructor || 'Tanmay Tuli'}</div>
-                <div class="progress-bar" style="margin-top:8px;"><div class="progress-fill" style="width:${c.progress || 0}%;"></div></div>
-              </div>
-              <span style="color:var(--brand); font-weight:600; font-size:0.9rem;">Continue →</span>
-            </div>`;
-          card.addEventListener('click', () => window.location.href = `/pages/course.html?id=${cid}`);
-          container.appendChild(card);
-        }
-      } catch(e) {}
+  if (!userData?.enrolledCourses?.length) return;
+  const container = document.getElementById('continueCards');
+  container.innerHTML = '';
+  try {
+    for (const cid of userData.enrolledCourses.slice(0, 3)) {
+      const cSnap = await getDoc(doc(db, 'courses', cid));
+      if (!cSnap.exists()) continue;
+      const c = cSnap.data();
+      // Calculate progress
+      const completed = userData.completedLectures?.[cid]?.length || 0;
+      const lecSnap = await getDocs(collection(db, `courses/${cid}/lectures`));
+      const total = lecSnap.size || 1;
+      const pct = Math.round((completed / total) * 100);
+      const card = document.createElement('div');
+      card.className = 'course-card';
+      card.style.marginBottom = '12px';
+      card.style.cursor = 'pointer';
+      card.innerHTML = `
+        <div style="display:flex; align-items:center; gap:16px; padding:16px 20px;">
+          <div style="width:56px; height:56px; border-radius:12px; background:linear-gradient(135deg, var(--brand), var(--brand-2)); display:flex; align-items:center; justify-content:center; font-size:1.8rem; flex-shrink:0;">${c.emoji || '📚'}</div>
+          <div style="flex:1;">
+            <div style="font-weight:600; margin-bottom:4px;">${c.title}</div>
+            <div style="font-size:0.82rem; color:var(--text-2); margin-bottom:8px;">${c.instructor || 'Tanmay Tuli'} · ${completed}/${total} lectures done</div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:${pct}%;"></div>
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-3); margin-top:4px;">${pct}% complete</div>
+          </div>
+          <span style="color:var(--brand); font-weight:600; font-size:0.9rem;">Continue →</span>
+        </div>`;
+      card.addEventListener('click', () => window.location.href = `/pages/course.html?id=${cid}`);
+      container.appendChild(card);
     }
+  } catch(e) { console.error(e); }
+}
 
     async function loadCourses() {
       const grid = document.getElementById('allCoursesGrid');

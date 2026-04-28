@@ -46,3 +46,5 @@ export {
   query, where, orderBy, serverTimestamp, increment,
   ref, uploadBytes, getDownloadURL
 };
+import { browserLocalPersistence, setPersistence } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+setPersistence(auth, browserLocalPersistence).catch(console.error);

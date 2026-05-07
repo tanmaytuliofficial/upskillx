@@ -141,14 +141,14 @@ In Cloudflare Pages → **Settings** → **Environment variables** → Add:
 
 | Variable | Value | Notes |
 |---|---|---|
-| `ADMIN_ID` | `admin` | Admin login ID |
-| `ADMIN_PASS` | `ADMIN@2026` | Admin password (encrypted) |
+| `ADMIN_ID` | `xxxxx` | Admin login ID |
+| `ADMIN_PASS` | `Axxxx6` | Admin password (encrypted) |
 | `ADMIN_SECRET` | `your_random_secret` | Token signing secret |
 | `FIREBASE_API_KEY` | `AIzaSy...` | From Firebase config |
 | `FIREBASE_PROJECT_ID` | `upskillx` | Your project ID |
 | `SENDGRID_API_KEY` | `SG.xxx...` | From SendGrid dashboard |
-| `FROM_EMAIL` | `official.tanmaytuli@gmail.com` | Sender email |
-| `FROM_NAME` | `UpSkillX by Tanmay Tuli` | Sender name |
+| `FROM_EMAIL` | `oxxxxxxxxl.com` | Sender email |
+| `FROM_NAME` | `Upxxxxxx Tuli` | Sender name |
 
 > ⚠️ Set all sensitive vars as **Encrypted**. Never expose ADMIN_PASS or SENDGRID_API_KEY in frontend code.
 
